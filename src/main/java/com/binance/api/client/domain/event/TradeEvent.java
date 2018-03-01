@@ -52,7 +52,7 @@ public class TradeEvent extends Trade {
         .append("eventType", eventType)
         .append("eventTime", eventTime)
         .append("symbol", symbol)
-        .append("aggTrade", super.toString())
+        .append("trade", super.toString())
         .toString();
   }
 }
