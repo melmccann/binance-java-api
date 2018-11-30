@@ -7,6 +7,7 @@ import com.binance.api.client.domain.event.AggTradeEvent;
 import com.binance.api.client.domain.event.AllMarketTickersEvent;
 import com.binance.api.client.domain.event.CandlestickEvent;
 import com.binance.api.client.domain.event.DepthEvent;
+import com.binance.api.client.domain.event.TradeEvent;
 import com.binance.api.client.domain.event.UserDataUpdateEvent;
 import com.binance.api.client.domain.market.CandlestickInterval;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -48,6 +49,12 @@ public class BinanceApiWebSocketClientImpl implements BinanceApiWebSocketClient,
                 .collect(Collectors.joining("/"));
         return createNewWebSocket(channel, new BinanceApiWebSocketListener<>(callback, CandlestickEvent.class));
     }
+
+    public Closeable onTradeEvent(String symbol, BinanceApiCallback<TradeEvent> callback) {
+        final String channel = String.format("%s@trade", symbol);
+        return createNewWebSocket(channel, new BinanceApiWebSocketListener<>(callback, TradeEvent.class));
+    }
+    
 
     public Closeable onAggTradeEvent(String symbols, BinanceApiCallback<AggTradeEvent> callback) {
         final String channel = Arrays.stream(symbols.split(","))

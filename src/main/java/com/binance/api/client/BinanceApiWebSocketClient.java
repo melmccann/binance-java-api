@@ -4,6 +4,7 @@ import com.binance.api.client.domain.event.AggTradeEvent;
 import com.binance.api.client.domain.event.AllMarketTickersEvent;
 import com.binance.api.client.domain.event.CandlestickEvent;
 import com.binance.api.client.domain.event.DepthEvent;
+import com.binance.api.client.domain.event.TradeEvent;
 import com.binance.api.client.domain.event.UserDataUpdateEvent;
 import com.binance.api.client.domain.market.CandlestickInterval;
 
@@ -34,6 +35,15 @@ public interface BinanceApiWebSocketClient extends Closeable {
      */
     Closeable onCandlestickEvent(String symbols, CandlestickInterval interval, BinanceApiCallback<CandlestickEvent> callback);
 
+    /**
+     * Open a new web socket to receive {@link TradeEvent tradeEvents} on a callback.
+     *
+     * @param symbol   the market symbol to subscribe to
+     * @param callback the callback to call on new events
+     * @return a {@link Closeable} that allows the underlying web socket to be closed.
+     */
+    Closeable onTradeEvent(String symbol, BinanceApiCallback<TradeEvent> callback);
+    
     /**
      * Open a new web socket to receive {@link AggTradeEvent aggTradeEvents} on a callback.
      *
