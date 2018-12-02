@@ -38,11 +38,11 @@ public interface BinanceApiWebSocketClient extends Closeable {
     /**
      * Open a new web socket to receive {@link TradeEvent tradeEvents} on a callback.
      *
-     * @param symbol   the market symbol to subscribe to
+     * @param symbols   market (one or coma-separated) symbol(s) to subscribe to
      * @param callback the callback to call on new events
      * @return a {@link Closeable} that allows the underlying web socket to be closed.
      */
-    Closeable onTradeEvent(String symbol, BinanceApiCallback<TradeEvent> callback);
+    Closeable onTradeEvent(String symbols, BinanceApiCallback<TradeEvent> callback);
     
     /**
      * Open a new web socket to receive {@link AggTradeEvent aggTradeEvents} on a callback.

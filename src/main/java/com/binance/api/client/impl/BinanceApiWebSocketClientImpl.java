@@ -50,8 +50,11 @@ public class BinanceApiWebSocketClientImpl implements BinanceApiWebSocketClient,
         return createNewWebSocket(channel, new BinanceApiWebSocketListener<>(callback, CandlestickEvent.class));
     }
 
-    public Closeable onTradeEvent(String symbol, BinanceApiCallback<TradeEvent> callback) {
-        final String channel = String.format("%s@trade", symbol);
+    public Closeable onTradeEvent(String symbols, BinanceApiCallback<TradeEvent> callback) {
+        final String channel = Arrays.stream(symbols.split(","))
+                .map(String::trim)
+                .map(s -> String.format("%s@trade", s))
+                .collect(Collectors.joining("/"));
         return createNewWebSocket(channel, new BinanceApiWebSocketListener<>(callback, TradeEvent.class));
     }
     
