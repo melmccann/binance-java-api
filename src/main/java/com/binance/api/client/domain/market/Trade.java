@@ -26,6 +26,12 @@ public class Trade {
   @JsonProperty("m")
   private boolean isBuyerMaker;
 
+  @JsonProperty("b")
+  private String buyerOrderId;
+
+  @JsonProperty("a")
+  private String sellerOrderId;
+
   public long getTradeId() {
     return tradeId;
   }
@@ -66,6 +72,22 @@ public class Trade {
     isBuyerMaker = buyerMaker;
   }
 
+    public String getBuyerOrderId() {
+        return buyerOrderId;
+    }
+
+    public void setBuyerOrderId(String buyerOrderId) {
+        this.buyerOrderId = buyerOrderId;
+    }
+
+    public String getSellerOrderId() {
+        return sellerOrderId;
+    }
+
+    public void setSellerOrderId(String sellerOrderId) {
+        this.sellerOrderId = sellerOrderId;
+    }
+
   @Override
   public String toString() {
     return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE)
@@ -74,6 +96,8 @@ public class Trade {
         .append("quantity", quantity)
         .append("tradeTime", tradeTime)
         .append("isBuyerMaker", isBuyerMaker)
+        .append("sellerOrderId", sellerOrderId)
+        .append("buyerOrderId", buyerOrderId)
         .toString();
   }
 }
