@@ -1,9 +1,11 @@
 package com.binance.api.client.impl;
 
 import com.binance.api.client.BinanceApiError;
+import com.binance.api.client.config.BinanceApiConfig;
 import com.binance.api.client.constant.BinanceApiConstants;
 import com.binance.api.client.exception.BinanceApiException;
 import com.binance.api.client.security.AuthenticationInterceptor;
+import okhttp3.Dispatcher;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -22,11 +24,19 @@ import java.util.concurrent.TimeUnit;
  * Generates a Binance API implementation based on @see {@link BinanceApiService}.
  */
 public class BinanceApiServiceGenerator {
-    private static final OkHttpClient sharedClient = new OkHttpClient.Builder()
-            .pingInterval(20, TimeUnit.SECONDS)
-            .build();
 
+    private static final OkHttpClient sharedClient;
     private static final Converter.Factory converterFactory = JacksonConverterFactory.create();
+
+    static {
+        Dispatcher dispatcher = new Dispatcher();
+        dispatcher.setMaxRequestsPerHost(500);
+        dispatcher.setMaxRequests(500);
+        sharedClient = new OkHttpClient.Builder()
+                .dispatcher(dispatcher)
+                .pingInterval(20, TimeUnit.SECONDS)
+                .build();
+    }
 
     @SuppressWarnings("unchecked")
     private static final Converter<ResponseBody, BinanceApiError> errorBodyConverter =
@@ -39,7 +49,7 @@ public class BinanceApiServiceGenerator {
 
     public static <S> S createService(Class<S> serviceClass, String apiKey, String secret) {
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-                .baseUrl(BinanceApiConstants.API_BASE_URL)
+                .baseUrl(BinanceApiConfig.getApiBaseUrl())
                 .addConverterFactory(converterFactory);
 
         if (StringUtils.isEmpty(apiKey) || StringUtils.isEmpty(secret)) {
